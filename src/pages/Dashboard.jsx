@@ -6,6 +6,7 @@ import { Intro } from "../components/Intro.jsx";
 import { toast } from "react-toastify";
 import { AddBudgetForm } from "../components/AddBudgetForm.jsx";
 import { AddExpenseForm } from "../components/AddExpenseForm.jsx";
+import { BudgetItem } from "../components/BudgetItem.jsx";
 
 export function dashboardLoader() {
     const userName = fetchData("userName");
@@ -21,7 +22,7 @@ export async function dashBoardAction({request}) {
     console.log(_action);
 
     //new user submission
-    if(_action === "newUser"){
+    if (_action === "newUser") {
         try {
             localStorage.setItem("userName", JSON.stringify(values.userName))
 
@@ -29,21 +30,22 @@ export async function dashBoardAction({request}) {
         } catch (e) {
             throw new Error("There was problem creating account")
         }
-    }else if(_action === "createBudget"){
-        try{
-            createBudget({name:values.newBudget, amount:values.newBudgetAmount})
+    } else if (_action === "createBudget") {
+        try {
+            createBudget({name: values.newBudget, amount: values.newBudgetAmount})
             return toast.success("Budget created!")
-        }catch (e){
+        } catch (e) {
             throw new Error("There was a problem creating your budget.")
         }
-    }else if(_action === "createExpense"){
-        try{
+    } else if (_action === "createExpense") {
+        try {
             createExpense({
-                name:values.newExpense,
-                amount:values.newExpenseAmount,
-                budgetId: values.newExpenseBudget})
+                name: values.newExpense,
+                amount: values.newExpenseAmount,
+                budgetId: values.newExpenseBudget
+            })
             return toast.success(`Expense ${values.newExpense} created!`)
-        }catch (e){
+        } catch (e) {
             throw new Error("There was a problem creating your expense.")
         }
     }
@@ -62,14 +64,21 @@ export const Dashboard = () => {
                         {budgets && budgets.length > 0 ? (<div className="grid-lg">
                             <div className="flex-lg">
                                 <AddBudgetForm/>
-                                <AddExpenseForm budgets={budgets} />
+                                <AddExpenseForm budgets={budgets}/>
                             </div>
-
+                            <h2>Existing Budgets</h2>
+                            <div className="budgets">
+                                {
+                                    budgets.map((budget) => (
+                                        <BudgetItem key={budget.id} budget={budget}/>
+                                    ))
+                                }
+                            </div>
                         </div>) : (
                             <div className="grid-sm">
                                 <p>Personal budgeting is the secret to financial freedom.</p>
                                 <p>Create a budget to get started!</p>
-                                <AddBudgetForm />
+                                <AddBudgetForm/>
                             </div>
                         )}
                     </div>
