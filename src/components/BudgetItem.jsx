@@ -1,7 +1,26 @@
+import { calculateSpentByBudget, formatCurrency, formatPercentage } from "../helpers.js";
+
 export const BudgetItem = ({budget}) => {
+    const {id,name,amount,color} = budget;
+    const spent = calculateSpentByBudget(id);
     return (
-        <div>
-            {budget.name}
+        <div
+            className="budget"
+            style={{
+                "--accent":color
+            }}
+        >
+            <div className="progress-text">
+                <h3>{name}</h3>
+                <p>{formatCurrency(amount)} Budgeted</p>
+            </div>
+            <progress max={amount} value={spent}>
+                {formatPercentage(spent/amount)}
+            </progress>
+            <div className="progress-text">
+                <small> {formatCurrency(spent)} spent</small>
+                <small>{formatCurrency((amount - spent))}</small>
+            </div>
         </div>
     )
 }
