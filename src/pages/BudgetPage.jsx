@@ -19,7 +19,7 @@ export async function budgetLoader({params}) {
     if (!budget) {
         throw new Error("The budget you are trying to find does not exist");
     }
-    return {budget,expenses}
+    return {budget, expenses}
 }
 
 export async function budgetAction({request}) {
@@ -35,7 +35,7 @@ export async function budgetAction({request}) {
         } catch (e) {
             throw new Error("There was a problem deleting your expense.")
         }
-    }else if (_action === "createExpense") {
+    } else if (_action === "createExpense") {
         try {
             createExpense({
                 name: values.newExpense,
@@ -48,13 +48,14 @@ export async function budgetAction({request}) {
         }
     }
 }
+
 export const BudgetPage = () => {
-    const {budget,expenses} = useLoaderData();
+    const {budget, expenses} = useLoaderData();
     return (
         <>
             <div
                 style={{
-                    "--accent":budget.color,
+                    "--accent": budget.color,
                 }}
                 className="grid-lg">
                 <h1 className="h2">
@@ -62,8 +63,8 @@ export const BudgetPage = () => {
                     Overview
                 </h1>
                 <div className="flex-lg">
-                    <BudgetItem budget={budget} />
-                    <AddExpenseForm budgets={[budget]} />
+                    <BudgetItem budget={budget} showDelete={true}/>
+                    <AddExpenseForm budgets={[budget]}/>
                 </div>
                 {
                     expenses && expenses.length > 0 && (
@@ -72,7 +73,7 @@ export const BudgetPage = () => {
                                 <span className="accent">{budget.name} </span>
                                 Expenses
                             </h2>
-                            <Table expenses={expenses} showBudget={false} />
+                            <Table expenses={expenses} showBudget={false}/>
                         </div>
                     )
                 }
